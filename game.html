@@ -2,82 +2,44 @@
 <html>
 <head>
     <title>Eevee Clicker</title>
-    <link rel="icon" type="image/gif" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1QeyS7XRDvOz11BXHMxjds_adrZ8tIulnQseqwfJ3wTg2MCAeFID2bGFj&s=10">
+    <link rel="icon" type="image/gif" href="https://www.clipartmax.com/png/full/470-4703646_download-hd-pokemon-png-pokemon-eevee-evolutions.png">
     <style>
         body {
-            background-color: #0d0c1d; /* Deeper cyber-purple */
+            background-color: #0d0c1d;
             color: #fff;
             font-family: sans-serif;
             text-align: center;
             padding: 40px;
         }
         h1 { color: #fd79a8; text-shadow: 0 0 10px rgba(253, 121, 168, 0.5); margin-bottom: 5px; }
-        .score-box {
-            font-size: 26px;
-            margin: 10px 0;
-            font-weight: bold;
-            color: #ffb8b8;
-        }
-        .level-box {
-            font-size: 18px; 
-            color: #a29bfe; 
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        .click-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            outline: none;
-            transition: transform 0.1s ease;
-            margin: 20px 0;
-        }
+        .score-box { font-size: 26px; margin: 10px 0; font-weight: bold; color: #ffb8b8; }
+        .level-box { font-size: 18px; color: #a29bfe; margin-bottom: 10px; font-weight: bold; }
+        .click-btn { background: none; border: none; cursor: pointer; outline: none; transition: transform 0.1s ease; margin: 20px 0; }
         .click-btn:active { transform: scale(0.85); }
-        .status-msg {
-            font-style: italic;
-            color: #a29bfe;
-            height: 20px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-        .shop-container {
-            background: #131224;
-            border: 2px dashed #fd79a8;
-            box-shadow: 0 0 15px rgba(253, 121, 168, 0.2);
-            border-radius: 12px;
-            padding: 20px;
-            max-width: 450px;
-            margin: 25px auto;
-        }
-        .shop-btn {
-            background: #fd79a8;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            margin: 5px;
-            transition: background 0.2s;
-        }
+        .status-msg { font-style: italic; color: #a29bfe; height: 20px; font-weight: bold; margin-bottom: 15px; }
+        .shop-container { background: #131224; border: 2px dashed #fd79a8; box-shadow: 0 0 15px rgba(253, 121, 168, 0.2); border-radius: 12px; padding: 20px; max-width: 450px; margin: 25px auto; }
+        .shop-btn { background: #fd79a8; color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; margin: 5px; transition: background 0.2s; }
         .shop-btn:hover { background: #e84393; }
-        
-        /* Grid setup for the 8 evolution buttons */
-        .evo-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin-top: 10px;
-        }
+        .evo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px; }
         .evo-btn { background: #6c5ce7; margin: 0; }
         .evo-btn:hover { background: #5b4cc4; }
+        .prestige-btn { background: #e1b12c; color: #000; display: none; margin-top: 15px; font-size: 16px; width: 90%; }
+        .prestige-btn:hover { background: #fbc531; }
         .nav-link { display: inline-block; margin-top: 20px; color: #666; text-decoration: none; }
+        .nav-link:hover { color: #fd79a8; }
+        .music-box { margin-top: 20px; opacity: 0.8; }
     </style>
 </head>
 <body>
 
     <h1>✦ Eevee Clicker ✦</h1>
-    <p style="color: #aaa;">Give treats, raise levels, and pick any Eeveelution!</p>
+    <p style="color: #aaa;">Give treats, unlock upgrades, evolve, and prestige to collect them all!</p>
+
+    <!-- POKEMON MUSIC PLAYER -->
+    <div class="music-box">
+        <p style="font-size: 12px; color: #888; margin-bottom: 5px;">🎵 Background Music (Pokémon Radio Loop):</p>
+        <iframe width="300" height="60" src="https://youtube.com" title="https://www.youtube.com/watch?v=6C5tnIhWC44" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
 
     <div class="score-box">
         🍪 Treats: <span id="counter">0</span>
@@ -88,11 +50,10 @@
     </div>
     
     <div style="font-size: 14px; color: #81ecec; margin-bottom: 10px;">
-        ⚡ Click Power: +<span id="clickPower">1</span> | 🤖 Auto-Feeders: <span id="autoCount">0</span>
+        ⚡ Click Power: +<span id="clickPower">1</span> | 🤖 Auto-Feeders: <span id="autoCount">0</span> | ⭐ Rebirths: <span id="rebirths">0</span>
     </div>
 
     <button class="click-btn" onclick="giveTreat()">
-        <!-- Using your custom Eevee link -->
         <img id="characterSprite" src="https://media.tenor.com/K2thrI_oaXsAAAAj/eevee-pokemon.gif" width="220" alt="Eevee"/>
     </button>
 
@@ -110,7 +71,7 @@
             <p style="font-size: 12px; color: #aaa; margin: 0 0 15px 0;">Automatically gives treats every second</p>
         </div>
         
-        <!-- FULL EVOLUTION LIST -->
+        <!-- EVOLUTION LIST -->
         <div id="evoSection" style="margin-top: 20px; border-top: 1px dashed #fd79a8; padding-top: 15px;">
             <p style="font-size: 14px; font-weight: bold; color: #ff7675;">🧬 Choose An Evolution (Cost: 100)</p>
             <div class="evo-grid">
@@ -124,6 +85,9 @@
                 <button class="shop-btn evo-btn" onclick="evolve('glaceon')">❄️ Glaceon</button>
             </div>
         </div>
+
+        <!-- REBIRTH BUTTON -->
+        <button id="prestigeButton" class="shop-btn prestige-btn" onclick="triggerPrestige()">✨ Go on a New Journey (Rebirth) ✨</button>
     </div>
 
 
@@ -134,16 +98,16 @@
         let autos = 0;
         let currentLevel = 1;
         let isEvolved = false;
+        let rebirthCount = 0;
 
-        // Image bank mapping every form to your direct links
         const forms = {
             sylveon: "https://i.pinimg.com/originals/78/51/2f/78512f568dc291c1ba186f8ac3877905.gif",
-            umbreon: "https://img.pokemondb.net/sprites/sun-moon/normal/umbreon.png",
-            jolteon: "https://media.tenor.com/wE4BAQWJGXkAAAAj/jolteon.gif",
-            flareon: "https://i.pinimg.com/originals/67/93/45/679345808c0a740e7aec8ff270192d23.gif",
+            umbreon: "https://i.pinimg.com/originals/c6/c9/b3/c6c9b33cbfcc3681ecb24442d0bdd87b.gif",
+            jolteon: "https://i.pinimg.com/originals/54/d9/76/54d97668379d03db113a273d4a9a077e.gif",
+            flareon: "https://i.pinimg.com/originals/a4/2f/ea/a42feaf5620423538694d1f4cc16cd15.gif",
             vaporeon: "https://i.pinimg.com/originals/93/17/4a/93174a1ae25d09e30ef77090f3a814b8.gif",
-            espeon: "https://img.pokemondb.net/sprites/go/normal/espeon.png",
-            leafeon: "https://static.wikia.nocookie.net/pokemon/images/f/fb/0470Leafeon_GO.png/revision/latest?cb=20181017084602",
+            espeon: "https://i.pinimg.com/originals/9b/9f/cb/9b9fcb9dfb7e98953681ed57ef1d4b34.gif",
+            leafeon: "https://i.pinimg.com/originals/81/47/3c/81473c0c5c82d128c21f8e6a4dc6acfa.gif",
             glaceon: "https://i.pinimg.com/originals/67/52/c8/6752c8f3b54282e7a3fe1ccfacd96775.gif"
         };
 
@@ -152,23 +116,22 @@
             document.getElementById("clickPower").innerText = power;
             document.getElementById("autoCount").innerText = autos;
             document.getElementById("level").innerText = currentLevel;
+            document.getElementById("rebirths").innerText = rebirthCount;
 
             if (!isEvolved) {
                 if (totalCollected >= 150) {
                     currentLevel = "Ready to Evolve! ✨";
                 } else if (totalCollected >= 75) {
-                    currentLevel = 3;
                     document.getElementById("status").innerText = "They completely trust you now! 💕";
                 } else if (totalCollected >= 25) {
-                    currentLevel = 2;
                     document.getElementById("status").innerText = "They are bouncing happily! ✨";
                 }
             }
         }
 
         function giveTreat() {
-            count += power;
-            totalCollected += power;
+            count += power * (1 + rebirthCount);
+            totalCollected += power * (1 + rebirthCount);
             updateDisplay();
         }
 
@@ -199,27 +162,41 @@
                 count -= 100;
                 isEvolved = true;
                 
-                // Pull link from our image bank and display it
                 document.getElementById("characterSprite").src = forms[chosenForm];
-                
-                // Hide the evolution choices menu after picking
                 document.getElementById("evoSection").style.display = "none";
+                document.getElementById("prestigeButton").style.display = "inline-block";
                 
-                // Upper-case the name for the level tracker text
                 let formattedName = chosenForm.charAt(0).toUpperCase() + chosenForm.slice(1);
                 currentLevel = "✨ " + formattedName + " ✨";
-                document.getElementById("status").innerText = "🎉 Evolution successful! Say hello to your new " + formattedName + "!";
-                
+                document.getElementById("status").innerText = "🎉 Evolved! Ready to rebirth when you are.";
                 updateDisplay();
             } else {
                 document.getElementById("status").innerText = "❌ Need 100 treats to trigger evolution!";
             }
         }
 
+        function triggerPrestige() {
+            rebirthCount++;
+            count = 0;
+            totalCollected = 0;
+            power = 1;
+            autos = 0;
+            isEvolved = false;
+            currentLevel = 1;
+            
+            document.getElementById("characterSprite").src = "https://media.tenor.com/K2thrI_oaXsAAAAj/eevee-pokemon.gif";
+            document.getElementById("evoSection").style.display = "block";
+            document.getElementById("prestigeButton").style.display = "none";
+            document.getElementById("status").innerText = "🌌 Started a new journey! Production speeds multiplied!";
+            
+            updateDisplay();
+        }
+
         setInterval(function() {
             if (autos > 0) {
-                count += autos;
-                totalCollected += autos;
+                let autoGains = autos * (1 + rebirthCount);
+                count += autoGains;
+                totalCollected += autoGains;
                 updateDisplay();
             }
         }, 1000);
