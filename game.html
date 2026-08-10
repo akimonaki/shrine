@@ -1,21 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Eevee Clicker!</title>
+    <title>Eevee Clicker</title>
+    <link rel="icon" type="image/gif" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1QeyS7XRDvOz11BXHMxjds_adrZ8tIulnQseqwfJ3wTg2MCAeFID2bGFj&s=10">
     <style>
         body {
-            background-color: #1a1a2e;
+            background-color: #0d0c1d; /* Deeper cyber-purple */
             color: #fff;
             font-family: sans-serif;
             text-align: center;
             padding: 40px;
         }
-        h1 { color: #ffb8b8; margin-bottom: 5px; }
+        h1 { color: #fd79a8; text-shadow: 0 0 10px rgba(253, 121, 168, 0.5); margin-bottom: 5px; }
         .score-box {
-            font-size: 24px;
+            font-size: 26px;
             margin: 10px 0;
             font-weight: bold;
-            color: #ffd2b8;
+            color: #ffb8b8;
+        }
+        .level-box {
+            font-size: 18px; 
+            color: #a29bfe; 
+            margin-bottom: 10px;
+            font-weight: bold;
         }
         .click-btn {
             background: none;
@@ -28,63 +35,94 @@
         .click-btn:active { transform: scale(0.85); }
         .status-msg {
             font-style: italic;
-            color: #ff7675;
+            color: #a29bfe;
             height: 20px;
             font-weight: bold;
+            margin-bottom: 15px;
         }
-        /* SHOP STYLING */
         .shop-container {
-            background: #161623;
-            border: 2px dashed #ff7675;
-            border-radius: 10px;
+            background: #131224;
+            border: 2px dashed #fd79a8;
+            box-shadow: 0 0 15px rgba(253, 121, 168, 0.2);
+            border-radius: 12px;
             padding: 20px;
-            max-width: 400px;
+            max-width: 450px;
             margin: 25px auto;
         }
         .shop-btn {
-            background: #ff7675;
+            background: #fd79a8;
             color: white;
             border: none;
             padding: 10px 15px;
-            border-radius: 5px;
+            border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
             margin: 5px;
+            transition: background 0.2s;
         }
-        .shop-btn:hover { background: #fd79a8; }
-        .nav-link { display: inline-block; margin-top: 20px; color: #aaa; text-decoration: none; }
+        .shop-btn:hover { background: #e84393; }
+        
+        /* Grid setup for the 8 evolution buttons */
+        .evo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .evo-btn { background: #6c5ce7; margin: 0; }
+        .evo-btn:hover { background: #5b4cc4; }
+        .nav-link { display: inline-block; margin-top: 20px; color: #666; text-decoration: none; }
     </style>
 </head>
 <body>
 
-    <h1>🤎 Eevee Clicker Game </h1>
-    <p>Click Eevee to give him treats and buy cool upgrades!</p>
+    <h1>✦ Eevee Clicker ✦</h1>
+    <p style="color: #aaa;">Give treats, raise levels, and pick any Eeveelution!</p>
 
     <div class="score-box">
         🍪 Treats: <span id="counter">0</span>
     </div>
+
+    <div class="level-box">
+        ✨ Level: <span id="level">1</span>
+    </div>
     
-    <div style="font-size: 18px; color: #a29bfe; margin-bottom: 10px;">
-        ⚡ Click Power: +<span id="clickPower">1</span> | 🤖 Auto-Clickers: <span id="autoCount">0</span>
+    <div style="font-size: 14px; color: #81ecec; margin-bottom: 10px;">
+        ⚡ Click Power: +<span id="clickPower">1</span> | 🤖 Auto-Feeders: <span id="autoCount">0</span>
     </div>
 
     <button class="click-btn" onclick="giveTreat()">
-        <!-- Kept your working Eevee GIF link -->
-        <img src="https://projectpokemon.org/home/gallery/image/74563-eevee-gifgif/?do=download" width="220" alt="Eevee"/>
+        <!-- Using your custom Eevee link -->
+        <img id="characterSprite" src="https://media.tenor.com/K2thrI_oaXsAAAAj/eevee-pokemon.gif" width="220" alt="Eevee"/>
     </button>
 
     <div id="status" class="status-msg">Eevee looks hungry...</div>
 
-    <!-- THE UPGRADE SHOP -->
+    <!-- THE SHOP -->
     <div class="shop-container">
-        <h3>🛒 Treat Shop</h3>
+        <h3>🛒 Upgrades & Evolutions</h3>
         <div>
             <button class="shop-btn" onclick="buyDouble()">🔥 Double Clicks (Cost: 15)</button>
-            <p style="font-size: 12px; color: #aaa; margin: 0 0 10px 0;">Each click gives 2 treats instead of 1</p>
+            <p style="font-size: 12px; color: #aaa; margin: 0 0 15px 0;">Each click gives more treats</p>
         </div>
         <div>
             <button class="shop-btn" onclick="buyAuto()">🤖 Auto-Feeder (Cost: 30)</button>
-            <p style="font-size: 12px; color: #aaa; margin: 0;">Automatically gives 1 treat every second</p>
+            <p style="font-size: 12px; color: #aaa; margin: 0 0 15px 0;">Automatically gives treats every second</p>
+        </div>
+        
+        <!-- FULL EVOLUTION LIST -->
+        <div id="evoSection" style="margin-top: 20px; border-top: 1px dashed #fd79a8; padding-top: 15px;">
+            <p style="font-size: 14px; font-weight: bold; color: #ff7675;">🧬 Choose An Evolution (Cost: 100)</p>
+            <div class="evo-grid">
+                <button class="shop-btn evo-btn" onclick="evolve('sylveon')">🎀 Sylveon</button>
+                <button class="shop-btn evo-btn" onclick="evolve('umbreon')">🌙 Umbreon</button>
+                <button class="shop-btn evo-btn" onclick="evolve('jolteon')">⚡ Jolteon</button>
+                <button class="shop-btn evo-btn" onclick="evolve('flareon')">🔥 Flareon</button>
+                <button class="shop-btn evo-btn" onclick="evolve('vaporeon')">💧 Vaporeon</button>
+                <button class="shop-btn evo-btn" onclick="evolve('espeon')">🔮 Espeon</button>
+                <button class="shop-btn evo-btn" onclick="evolve('leafeon')">🍃 Leafeon</button>
+                <button class="shop-btn evo-btn" onclick="evolve('glaceon')">❄️ Glaceon</button>
+            </div>
         </div>
     </div>
 
@@ -92,22 +130,49 @@
 
     <script>
         let count = 0;
+        let totalCollected = 0;
         let power = 1;
         let autos = 0;
+        let currentLevel = 1;
+        let isEvolved = false;
+
+        // Image bank mapping every form to your direct links
+        const forms = {
+            sylveon: "https://i.pinimg.com/originals/78/51/2f/78512f568dc291c1ba186f8ac3877905.gif",
+            umbreon: "https://img.pokemondb.net/sprites/sun-moon/normal/umbreon.png",
+            jolteon: "https://media.tenor.com/wE4BAQWJGXkAAAAj/jolteon.gif",
+            flareon: "https://i.pinimg.com/originals/67/93/45/679345808c0a740e7aec8ff270192d23.gif",
+            vaporeon: "https://i.pinimg.com/originals/93/17/4a/93174a1ae25d09e30ef77090f3a814b8.gif",
+            espeon: "https://img.pokemondb.net/sprites/go/normal/espeon.png",
+            leafeon: "https://static.wikia.nocookie.net/pokemon/images/f/fb/0470Leafeon_GO.png/revision/latest?cb=20181017084602",
+            glaceon: "https://i.pinimg.com/originals/67/52/c8/6752c8f3b54282e7a3fe1ccfacd96775.gif"
+        };
 
         function updateDisplay() {
             document.getElementById("counter").innerText = count;
             document.getElementById("clickPower").innerText = power;
             document.getElementById("autoCount").innerText = autos;
+            document.getElementById("level").innerText = currentLevel;
+
+            if (!isEvolved) {
+                if (totalCollected >= 150) {
+                    currentLevel = "Ready to Evolve! ✨";
+                } else if (totalCollected >= 75) {
+                    currentLevel = 3;
+                    document.getElementById("status").innerText = "They completely trust you now! 💕";
+                } else if (totalCollected >= 25) {
+                    currentLevel = 2;
+                    document.getElementById("status").innerText = "They are bouncing happily! ✨";
+                }
+            }
         }
 
-        // Manual click action
         function giveTreat() {
             count += power;
+            totalCollected += power;
             updateDisplay();
         }
 
-        // Upgrade 1: Double Clicks
         function buyDouble() {
             if (count >= 15) {
                 count -= 15;
@@ -119,7 +184,6 @@
             }
         }
 
-        // Upgrade 2: Auto Clicker
         function buyAuto() {
             if (count >= 30) {
                 count -= 30;
@@ -131,10 +195,32 @@
             }
         }
 
-        // Background loop that runs the Auto-Clickers every 1 second
+        function evolve(chosenForm) {
+            if (count >= 100) {
+                count -= 100;
+                isEvolved = true;
+                
+                // Pull link from our image bank and display it
+                document.getElementById("characterSprite").src = forms[chosenForm];
+                
+                // Hide the evolution choices menu after picking
+                document.getElementById("evoSection").style.display = "none";
+                
+                // Upper-case the name for the level tracker text
+                let formattedName = chosenForm.charAt(0).toUpperCase() + chosenForm.slice(1);
+                currentLevel = "✨ " + formattedName + " ✨";
+                document.getElementById("status").innerText = "🎉 Evolution successful! Say hello to your new " + formattedName + "!";
+                
+                updateDisplay();
+            } else {
+                document.getElementById("status").innerText = "❌ Need 100 treats to trigger evolution!";
+            }
+        }
+
         setInterval(function() {
             if (autos > 0) {
                 count += autos;
+                totalCollected += autos;
                 updateDisplay();
             }
         }, 1000);
