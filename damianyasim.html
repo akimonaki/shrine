@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Damianya Simulator </title>
+    <link rel="icon" type="image/gif" href="https://tenor.com">
+    <style>
+        body {
+            background-color: #0d0c1d;
+            color: #fff;
+            font-family: sans-serif;
+            text-align: center;
+            padding: 40px;
+        }
+        h1 { color: #fd79a8; text-shadow: 0 0 10px rgba(253, 121, 168, 0.5); }
+        
+        .game-container {
+            background: #131224;
+            border: 2px dashed #fd79a8;
+            box-shadow: 0 0 15px rgba(253, 121, 168, 0.2);
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
+        .sprite-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        img {
+            border-radius: 8px;
+            width: 160px;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        /* Dialogue Box Style */
+        .dialogue-box {
+            background: #1c1a36;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 60px;
+            margin: 20px 0;
+            font-size: 16px;
+            border-left: 5px solid #fd79a8;
+            text-align: left;
+        }
+
+        .speaker-name {
+            font-weight: bold;
+            color: #ffd2b8;
+            margin-bottom: 5px;
+        }
+
+        /* Choice Buttons */
+        .choice-btn {
+            background: #6c5ce7;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 8px;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            transition: background 0.2s;
+        }
+        .choice-btn:hover { background: #fd79a8; }
+        
+        .nav-link { display: inline-block; margin-top: 20px; color: #666; text-decoration: none; }
+        .nav-link:hover { color: #fd79a8; }
+    </style>
+</head>
+<body>
+
+    <h1>✨ Damianya Interaction Simulator ✨</h1>
+    <p style="color: #aaa;">Choose options to see how Damian reacts to Anya at Eden Academy!</p>
+
+    <div class="game-container">
+        
+        <!-- Animated Sprites using the Tenor links -->
+        <div class="sprite-container">
+            <div>
+                <p style="font-size: 12px; color: #81ecec; margin: 0;">Anya (Chaotic)</p>
+                <img id="anyaSprite" src="https://static.wikia.nocookie.net/spy-x-family9171/images/f/ff/Anya_Forger_Anime.png/revision/latest/scale-to-width/360?cb=20230112004645" alt="Anya"/>
+            </div>
+            <div>
+                <p style="font-size: 12px; color: #ff7675; margin: 0;">Damian (Tsundere)</p>
+                <img id="damianSprite" src="https://static.wikia.nocookie.net/spy-x-family9171/images/3/35/Damian_Desmond_Anime.png/revision/latest/scale-to-width/360?cb=20230112004352" alt="Damian"/>
+            </div>
+        </div>
+
+        <!-- Dialogue Screen -->
+        <div class="dialogue-box">
+            <div id="speaker" class="speaker-name">Narrator</div>
+            <div id="text">Anya walks up to Damian in the hallway. Damian instantly starts sweating and trying to look cool. What should Anya do?</div>
+        </div>
+
+        <!-- Interactive Choices -->
+        <div id="choicesSection">
+            <button class="choice-btn" onclick="triggerScene('peanut')">🥜 Offer him a peanut</button>
+            <button class="choice-btn" onclick="triggerScene('mind')">🔮 Read his mind silently</button>
+            <button class="choice-btn" onclick="triggerScene('smile')">𓁹‿𓁹 Do the signature smug smile</button>
+        </div>
+
+    </div>
+
+    <a href="index.html" class="nav-link">← Back to my Shrine</a>
+
+    <script>
+        function triggerScene(type) {
+            let speaker = document.getElementById("speaker");
+            let text = document.getElementById("text");
+            let choices = document.getElementById("choicesSection");
+
+            if (type === 'peanut') {
+                speaker.innerText = "Damian Desmond";
+                text.innerText = "*blushes violently* 'I-I don't want your stupid commoner food, shrimp! ...But... I guess if you really want me to have it, I'll take it!'";
+                
+                // Show follow-up scenario
+                choices.innerHTML = `
+                    <button class="choice-btn" onclick="triggerScene('confess')">Tell him he's being elegant-to</button>
+                    <button class="choice-btn" onclick="resetGame()">Start over</button>
+                `;
+            } 
+            else if (type === 'mind') {
+                speaker.innerText = "Anya Forger (Mind Reading)";
+                text.innerText = "*Anya hears screaming inside his head:* 'OMG SHE'S LOOKING AT ME WHY IS SHE LOOKING AT ME IS MY HAIR MESSY WHAT DO I SAY?!'";
+                
+                choices.innerHTML = `
+                    <button class="choice-btn" onclick="triggerScene('tease')">Tease him about his racing thoughts</button>
+                    <button class="choice-btn" onclick="resetGame()">Start over</button>
+                `;
+            } 
+            else if (type === 'smile') {
+                speaker.innerText = "Damian Desmond";
+                text.innerText = "'W-What is with that face?! Stop looking at me like that, it's annoying!' *He looks away trying to hide his massive blush*";
+                
+                choices.innerHTML = `
+                    <button class="choice-btn" onclick="triggerScene('confess')">Pat him on the shoulder</button>
+                    <button class="choice-btn" onclick="resetGame()">Start over</button>
+                `;
+            }
+            else if (type === 'confess') {
+                speaker.innerText = "Damian Desmond";
+                text.innerText = "'Shut up! You're the one who's... ugh! Never mind!' *He runs away down the hall dropping his notebook* 🎉 TSUNDERE ENDING!";
+                choices.innerHTML = `<button class="choice-btn" onclick="resetGame()">Play Again 🔄</button>`;
+            }
+            else if (type === 'tease') {
+                speaker.innerText = "Narrator";
+                text.innerText = "Damian panics completely, turns bright pink, and yells 'SY-ON BOY' before tripping over his own cape. 👑 ELEGANT ENDING!";
+                choices.innerHTML = `<button class="choice-btn" onclick="resetGame()">Play Again 🔄</button>`;
+            }
+        }
+
+        function resetGame() {
+            document.getElementById("speaker").innerText = "Narrator";
+            document.getElementById("text").innerText = "Anya walks up to Damian in the hallway. Damian instantly starts sweating and trying to look cool. What should Anya do?";
+            document.getElementById("choicesSection").innerHTML = `
+                <button class="choice-btn" onclick="triggerScene('peanut')">🥜 Offer him a peanut</button>
+                <button class="choice-btn" onclick="triggerScene('mind')">🔮 Read his mind silently</button>
+                <button class="choice-btn" onclick="triggerScene('smile')">𓁹‿𓁹 Do the signature smug smile</button>
+            `;
+        }
+    </script>
+
+</body>
+</html>
