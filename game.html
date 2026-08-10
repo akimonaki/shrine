@@ -8,12 +8,12 @@
             color: #fff;
             font-family: sans-serif;
             text-align: center;
-            padding: 50px;
+            padding: 40px;
         }
-        h1 { color: #ffb8b8; }
+        h1 { color: #ffb8b8; margin-bottom: 5px; }
         .score-box {
             font-size: 24px;
-            margin: 20px 0;
+            margin: 10px 0;
             font-weight: bold;
             color: #ffd2b8;
         }
@@ -23,71 +23,121 @@
             cursor: pointer;
             outline: none;
             transition: transform 0.1s ease;
+            margin: 20px 0;
         }
-        .click-btn:active {
-            transform: scale(0.9);
-        }
+        .click-btn:active { transform: scale(0.85); }
         .status-msg {
             font-style: italic;
-            color: #aaa;
-            margin-top: 15px;
-            height: 20px;
-        }
-        .nav-link {
-            display: inline-block;
-            margin-top: 40px;
             color: #ff7675;
-            text-decoration: none;
+            height: 20px;
+            font-weight: bold;
         }
+        /* SHOP STYLING */
+        .shop-container {
+            background: #161623;
+            border: 2px dashed #ff7675;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 400px;
+            margin: 25px auto;
+        }
+        .shop-btn {
+            background: #ff7675;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .shop-btn:hover { background: #fd79a8; }
+        .nav-link { display: inline-block; margin-top: 20px; color: #aaa; text-decoration: none; }
     </style>
 </head>
 <body>
 
-    <h1>🤎 Eevee Clicker Game 🤎</h1>
-    <p>Click Eevee to give him treats and level him up!</p>
+    <h1>🤎 Eevee Clicker Game </h1>
+    <p>Click Eevee to give him treats and buy cool upgrades!</p>
 
     <div class="score-box">
-        🍪 Treats Given: <span id="counter">0</span>
+        🍪 Treats: <span id="counter">0</span>
     </div>
     
-    <div class="score-box" style="font-size: 18px; color: #a29bfe;">
-        ✨ Eevee Level: <span id="level">1</span>
+    <div style="font-size: 18px; color: #a29bfe; margin-bottom: 10px;">
+        ⚡ Click Power: +<span id="clickPower">1</span> | 🤖 Auto-Clickers: <span id="autoCount">0</span>
     </div>
 
-    <!-- The button is just Eevee himself! -->
     <button class="click-btn" onclick="giveTreat()">
-        <img src="https://projectpokemon.org/home/gallery/image/74563-eevee-gifgif/?do=download" width="250" alt="Eevee"/>
+        <!-- Kept your working Eevee GIF link -->
+        <img src="https://projectpokemon.org/home/gallery/image/74563-eevee-gifgif/?do=download" width="220" alt="Eevee"/>
     </button>
 
     <div id="status" class="status-msg">Eevee looks hungry...</div>
 
-    <br>
+    <!-- THE UPGRADE SHOP -->
+    <div class="shop-container">
+        <h3>🛒 Treat Shop</h3>
+        <div>
+            <button class="shop-btn" onclick="buyDouble()">🔥 Double Clicks (Cost: 15)</button>
+            <p style="font-size: 12px; color: #aaa; margin: 0 0 10px 0;">Each click gives 2 treats instead of 1</p>
+        </div>
+        <div>
+            <button class="shop-btn" onclick="buyAuto()">🤖 Auto-Feeder (Cost: 30)</button>
+            <p style="font-size: 12px; color: #aaa; margin: 0;">Automatically gives 1 treat every second</p>
+        </div>
+    </div>
+
     <a href="index.html" class="nav-link">← Back to my Shrine</a>
 
     <script>
         let count = 0;
-        let currentLevel = 1;
+        let power = 1;
+        let autos = 0;
 
-        function giveTreat() {
-            // 1. Add 1 to the treat counter
-            count++;
+        function updateDisplay() {
             document.getElementById("counter").innerText = count;
+            document.getElementById("clickPower").innerText = power;
+            document.getElementById("autoCount").innerText = autos;
+        }
 
-            // 2. Level up logic!
-            if (count === 10) {
-                currentLevel = 2;
-                document.getElementById("level").innerText = currentLevel;
-                document.getElementById("status").innerText = "Eevee is happy! (Level 2)";
-            } else if (count === 25) {
-                currentLevel = 3;
-                document.getElementById("level").innerText = currentLevel;
-                document.getElementById("status").innerText = "Eevee loves you! (Level 3)";
-            } else if (count === 50) {
-                currentLevel = "MAX";
-                document.getElementById("level").innerText = currentLevel;
-                document.getElementById("status").innerText = "Eevee is completely stuffed! 🎉";
+        // Manual click action
+        function giveTreat() {
+            count += power;
+            updateDisplay();
+        }
+
+        // Upgrade 1: Double Clicks
+        function buyDouble() {
+            if (count >= 15) {
+                count -= 15;
+                power += 1;
+                document.getElementById("status").innerText = "💥 Click power upgraded!";
+                updateDisplay();
+            } else {
+                document.getElementById("status").innerText = "❌ Not enough treats!";
             }
         }
+
+        // Upgrade 2: Auto Clicker
+        function buyAuto() {
+            if (count >= 30) {
+                count -= 30;
+                autos += 1;
+                document.getElementById("status").innerText = "🤖 Auto-feeder activated!";
+                updateDisplay();
+            } else {
+                document.getElementById("status").innerText = "❌ Not enough treats!";
+            }
+        }
+
+        // Background loop that runs the Auto-Clickers every 1 second
+        setInterval(function() {
+            if (autos > 0) {
+                count += autos;
+                updateDisplay();
+            }
+        }, 1000);
     </script>
 
 </body>
